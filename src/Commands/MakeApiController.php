@@ -2,15 +2,17 @@
 
 namespace DavidNineRoc\ApiHelper\Commands;
 
+use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
 class MakeApiController extends GeneratorCommand
 {
     protected $name = 'make:apiController';
+
     protected $description = '创建一个 API 控制器';
+
     protected $type = 'Controller';
 
     protected function getStub()
@@ -29,7 +31,8 @@ class MakeApiController extends GeneratorCommand
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
+     *
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
@@ -42,7 +45,8 @@ class MakeApiController extends GeneratorCommand
      *
      * Remove the base controller import if we are already in base namespace.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return string
      */
     protected function buildClass($name)
@@ -60,7 +64,7 @@ class MakeApiController extends GeneratorCommand
         }
 
         // 同级目录所以不需要
-        $replace["use {$controllerNamespace}\ApiController;\n"] = "";
+        $replace["use {$controllerNamespace}\ApiController;\n"] = '';
 
         return str_replace(
             array_keys($replace), array_values($replace), parent::buildClass($name)
@@ -76,7 +80,7 @@ class MakeApiController extends GeneratorCommand
     {
         $parentModelClass = $this->parseModel($this->option('parent'));
 
-        if (! class_exists($parentModelClass)) {
+        if (!class_exists($parentModelClass)) {
             if ($this->confirm("A {$parentModelClass} model does not exist. Do you want to generate it?", true)) {
                 $this->call('make:model', ['name' => $parentModelClass]);
             }
@@ -92,14 +96,15 @@ class MakeApiController extends GeneratorCommand
     /**
      * Build the model replacement values.
      *
-     * @param  array  $replace
+     * @param array $replace
+     *
      * @return array
      */
     protected function buildModelReplacements(array $replace)
     {
         $modelClass = $this->parseModel($this->option('model'));
 
-        if (! class_exists($modelClass)) {
+        if (!class_exists($modelClass)) {
             if ($this->confirm("A {$modelClass} model does not exist. Do you want to generate it?", true)) {
                 $this->call('make:model', ['name' => $modelClass]);
             }
@@ -115,7 +120,8 @@ class MakeApiController extends GeneratorCommand
     /**
      * Get the fully-qualified model class name.
      *
-     * @param  string  $model
+     * @param string $model
+     *
      * @return string
      */
     protected function parseModel($model)
@@ -126,7 +132,7 @@ class MakeApiController extends GeneratorCommand
 
         $model = trim(str_replace('/', '\\', $model), '\\');
 
-        if (! Str::startsWith($model, $rootNamespace = $this->laravel->getNamespace())) {
+        if (!Str::startsWith($model, $rootNamespace = $this->laravel->getNamespace())) {
             $model = $rootNamespace.$model;
         }
 
