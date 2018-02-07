@@ -6,12 +6,6 @@ use Illuminate\Support\ServiceProvider;
 
 class ApiServiceProvider extends ServiceProvider
 {
-
-    public function __construct(\Illuminate\Contracts\Foundation\Application $app)
-    {
-        parent::__construct($app);
-    }
-
     /**
      * Bootstrap the application services.
      *
