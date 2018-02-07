@@ -29,7 +29,7 @@ class MakeApiController extends GeneratorCommand
     }
 
     /**
-     * Get the default namespace for the class.
+     * 获取默认命名空间
      *
      * @param string $rootNamespace
      *
@@ -37,13 +37,13 @@ class MakeApiController extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Http\Controllers\Api';
+        return $rootNamespace.config('apihelper.namespace', '\Http\Controllers\Api');
     }
 
     /**
-     * Build the class with the given name.
+     * 使用给定的名称构建类。
      *
-     * Remove the base controller import if we are already in base namespace.
+     * 如果我们已经在基命名空间中，则删除基本控制器导入。
      *
      * @param string $name
      *
@@ -72,7 +72,7 @@ class MakeApiController extends GeneratorCommand
     }
 
     /**
-     * Build the replacements for a parent controller.
+     * 为父控制器构建替换。
      *
      * @return array
      */
@@ -94,7 +94,7 @@ class MakeApiController extends GeneratorCommand
     }
 
     /**
-     * Build the model replacement values.
+     * 建立模型替换值。
      *
      * @param array $replace
      *
@@ -118,7 +118,7 @@ class MakeApiController extends GeneratorCommand
     }
 
     /**
-     * Get the fully-qualified model class name.
+     * 获取完全限定的模型类名。
      *
      * @param string $model
      *
@@ -140,7 +140,7 @@ class MakeApiController extends GeneratorCommand
     }
 
     /**
-     * Get the console command options.
+     * 获取控制台命令选项。
      *
      * @return array
      */
