@@ -7,7 +7,7 @@ use Illuminate\Http\Response;
 class StatusServe extends Response
 {
     /**
-     * 通过状态码获取默认的响应消息
+     * 通过状态码获取默认的响应消息。
      * @param $statusCode
      * @return string
      */

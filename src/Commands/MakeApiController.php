@@ -11,12 +11,28 @@ class MakeApiController extends GeneratorCommand
 {
     use ApiCommand;
 
+    /**
+     * 控制台命令。
+     * @var string
+     */
     protected $name = 'make:apiController';
 
+    /**
+     * 命令描述。
+     * @var string
+     */
     protected $description = '创建一个 API 控制器';
 
+    /**
+     * 生成的类类型。
+     * @var string
+     */
     protected $type = 'Controller';
 
+    /**
+     * 创建基类并获取和输入有关的控制器。
+     * @return string
+     */
     protected function getStub()
     {
         // 创建 API 基类
@@ -34,7 +50,7 @@ class MakeApiController extends GeneratorCommand
     }
 
     /**
-     * 获取控制器默认命名空间
+     * 获取控制器默认命名空间。
      *
      * @param string $rootNamespace
      *
@@ -77,7 +93,7 @@ class MakeApiController extends GeneratorCommand
     }
 
     /**
-     * 重写父类替换方法，因为 ApiController 的命名空间也是动态的
+     * 重写父类替换方法，因为 ApiController 的命名空间也是动态的。
      *
      * @param  string  $stub
      * @param  string  $name
@@ -193,7 +209,7 @@ class MakeApiController extends GeneratorCommand
     }
 
     /**
-     * 创建基础层的文件
+     * 创建基础层的文件。
      */
     protected function createBase()
     {
@@ -217,6 +233,12 @@ class MakeApiController extends GeneratorCommand
         }
     }
 
+    /**
+     * 根据给定的 key class 创建文件。
+     * @param $key
+     * @param $class
+     * @return bool
+     */
     protected function createFromName($key, $class)
     {
         $name = $this->qualifyClass($class['full_name']);

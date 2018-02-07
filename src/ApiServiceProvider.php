@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 class ApiServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap the application services.
+     * 引导应用程序服务。
      */
     public function boot()
     {
@@ -18,7 +18,6 @@ class ApiServiceProvider extends ServiceProvider
         ], 'config');
 
 
-        // 绑定需要注册的命令
         if ($this->app->runningInConsole()) {
             $this->commands([
                 // 创建 API 控制器
@@ -28,7 +27,7 @@ class ApiServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the application services.
+     * 注册应用程序服务。
      */
     public function register()
     {

@@ -5,7 +5,7 @@ namespace DavidNineRoc\ApiHelper\Commands;
 trait ApiCommand
 {
     /**
-     * 获取服务层的命名空间
+     * 获取服务层的命名空间。
      * @return string
      */
     protected function getServicesNamespace()
@@ -15,7 +15,7 @@ trait ApiCommand
     }
 
     /**
-     * 获取 API 基类的完整名字
+     * 获取 API 基类的完整名字。
      * @return string
      */
     protected function getFullApiName()
@@ -24,7 +24,7 @@ trait ApiCommand
     }
 
     /**
-     * 获取 Api 基类的命名空间
+     * 获取 Api 基类的命名空间。
      * @return string
      */
     protected function getApiNamespace()
@@ -34,7 +34,7 @@ trait ApiCommand
     }
 
     /**
-     * 获取 Api 基类的名字
+     * 获取 Api 基类的名字。
      * @return string
      */
     protected function getApiName()

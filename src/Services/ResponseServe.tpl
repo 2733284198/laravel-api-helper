@@ -5,31 +5,31 @@ namespace DummyServicesNamespace;
 trait ResponseServe
 {
     /**
-     * 消息状态码
+     * 消息状态码。
      * @var int
      */
     protected $code = 200;
 
     /**
-     * 消息内容
+     * 消息内容。
      * @var string
      */
     protected $msg = '';
 
     /**
-     * 数据
+     * 响应数据。
      * @var array
      */
     protected $data = [];
 
     /**
-     * 扩展字段返回
+     * 扩展字段返回。
      * @var array
      */
     protected $extendField = [];
 
     /**
-     * 资源创建成功响应
+     * 资源创建成功响应。
      * @param string $msg
      * @param array $data
      * @return \Illuminate\Http\JsonResponse
@@ -44,7 +44,7 @@ trait ResponseServe
 
 
     /**
-     * 服务器位置错误响应
+     * 服务器位置错误响应。
      * @param string $msg
      * @param array $data
      * @return \Illuminate\Http\JsonResponse
@@ -58,7 +58,7 @@ trait ResponseServe
 
 
     /**
-     * 权限不足响应
+     * 权限不足响应。
      * @param string $msg
      * @return \Illuminate\Http\JsonResponse
      */
@@ -71,7 +71,7 @@ trait ResponseServe
 
 
     /**
-     * 身份验证失败响应
+     * 身份验证失败响应。
      * @param string $msg
      * @return \Illuminate\Http\JsonResponse
      */
@@ -82,6 +82,11 @@ trait ResponseServe
             ->toJson();
     }
 
+    /**
+    * 页面找不到响应。
+    * @param string $msg
+    * @return \Illuminate\Http\JsonResponse
+    */
     public function notFound($msg = '请求页面找不到')
     {
         return $this->setCode(StatusServe::HTTP_NOT_FOUND)
@@ -90,7 +95,7 @@ trait ResponseServe
     }
 
     /**
-     * 表单验证错误响应
+     * 表单验证错误响应。
      * @param string $msg
      * @return \Illuminate\Http\JsonResponse
      */
@@ -102,7 +107,7 @@ trait ResponseServe
     }
 
     /**
-     * 返回 json 响应数据
+     * 返回 json 响应数据。
      * @param int $httpStatus
      * @param array $headers
      * @return \Illuminate\Http\JsonResponse
@@ -118,12 +123,12 @@ trait ResponseServe
     }
 
     /**
-     * 把 状态码，响应消息，响应数据，扩展字段（如果有的话）放入同一级数组
+     * 把 状态码，响应消息，响应数据，扩展字段（如果有的话）放入同一级数组。
      * @return array
      */
     protected function formatResponse()
     {
-        // 如果响应消息从未被设置过，则去取默认的消息
+        // 如果响应消息从未被设置过，则去取默认的消息。
         $this->msg = empty($this->msg) ? StatusServe::getStatusMsg($this->code) : $this->msg;
 
         $response = [
@@ -133,7 +138,7 @@ trait ResponseServe
         ];
 
         /**
-         * 如果有扩展字段，依次加入响应内容中
+         * 如果有扩展字段，依次加入响应内容中。
          */
         if (! empty($this->extendField)) {
             foreach ($this->extendField as $key => $value) {
@@ -145,7 +150,7 @@ trait ResponseServe
     }
 
     /**
-     * 设置响应状态码
+     * 设置响应状态码。
      * @param $code
      * @return $this
      */
@@ -157,7 +162,7 @@ trait ResponseServe
     }
 
     /**
-     * 设置响应消息
+     * 设置响应消息。
      * @param $msg
      * @return $this
      */
@@ -169,7 +174,7 @@ trait ResponseServe
     }
 
     /**
-     * 设置响应返回数据
+     * 设置响应返回数据。
      * @param $data
      * @return $this
      */
@@ -181,7 +186,7 @@ trait ResponseServe
     }
 
     /**
-     * 设置扩展字段
+     * 设置扩展字段。
      * @param $field
      * @param $value
      * @return $this
