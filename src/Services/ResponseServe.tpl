@@ -6,12 +6,36 @@ use Symfony\Component\HttpFoundation\Response;
 
 trait ResponseServe
 {
-    protected $code = 0;
+    /**
+     * 消息状态码
+     * @var int
+     */
+    protected $code = 200;
+
+    /**
+     * 消息内容
+     * @var string
+     */
     protected $msg = 'SUCCESS';
+
+    /**
+     * 数据
+     * @var array
+     */
     protected $data = [];
 
+    /**
+     * 扩展字段返回
+     * @var array
+     */
     protected $extendField = [];
 
+    /**
+     * 资源创建成功响应
+     * @param string $msg
+     * @param array $data
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function created($msg = '资源创建成功', array $data = [])
     {
         return $this->setCode(Response::HTTP_CREATED)
@@ -21,6 +45,12 @@ trait ResponseServe
     }
 
 
+    /**
+     * 服务器位置错误响应
+     * @param string $msg
+     * @param array $data
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function serviceUnavailable($msg = '服务器未知出错')
     {
         return $this->setCode(Response::HTTP_SERVICE_UNAVAILABLE)
@@ -29,6 +59,11 @@ trait ResponseServe
     }
 
 
+    /**
+     * 权限不足响应
+     * @param string $msg
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function forbidden($msg = '权限不足')
     {
         return $this->setCode(Response::HTTP_FORBIDDEN)
@@ -37,6 +72,11 @@ trait ResponseServe
     }
 
 
+    /**
+     * 身份验证失败响应
+     * @param string $msg
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function unAuthorized($msg = '身份验证失败')
     {
         return $this->setCode(Response::HTTP_UNAUTHORIZED)
@@ -51,6 +91,11 @@ trait ResponseServe
             ->toJson();
     }
 
+    /**
+     * 表单验证错误响应
+     * @param string $msg
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function badRequest($msg = '表单验证出错')
     {
         return $this->setCode(Response::HTTP_BAD_REQUEST)
@@ -58,13 +103,27 @@ trait ResponseServe
             ->toJson();
     }
 
-
+    /**
+     * 返回 json 响应数据
+     * @param int $httpStatus
+     * @param array $headers
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function toJson($httpStatus = 200, $headers = [])
     {
-        return response()->json($this->formatResponse(), $httpStatus, $headers, JSON_UNESCAPED_UNICODE);
+        return response()->json(
+            $this->formatResponse(),
+            $httpStatus,
+            $headers,
+            JSON_UNESCAPED_UNICODE
+        );
     }
 
-    private function formatResponse()
+    /**
+     * 把 状态码，响应消息，响应数据，扩展字段（如果有的话）放入同一级数组
+     * @return array
+     */
+    protected function formatResponse()
     {
         $response = [
             'code' => $this->code,
@@ -84,6 +143,11 @@ trait ResponseServe
         return $response;
     }
 
+    /**
+     * 设置响应状态码
+     * @param $code
+     * @return $this
+     */
     public function setCode($code)
     {
         $this->code = $code;
@@ -91,6 +155,11 @@ trait ResponseServe
         return $this;
     }
 
+    /**
+     * 设置响应消息
+     * @param $msg
+     * @return $this
+     */
     public function setMsg($msg)
     {
         $this->msg = $msg;
@@ -98,6 +167,11 @@ trait ResponseServe
         return $this;
     }
 
+    /**
+     * 设置响应返回数据
+     * @param $data
+     * @return $this
+     */
     public function setData($data)
     {
         $this->data = $data;
@@ -105,6 +179,12 @@ trait ResponseServe
         return $this;
     }
 
+    /**
+     * 设置扩展字段
+     * @param $field
+     * @param $value
+     * @return $this
+     */
     public function setExtendField($field, $value)
     {
         $this->extendField[$field] = $value;
