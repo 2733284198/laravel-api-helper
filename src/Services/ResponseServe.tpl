@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace DummyServicesNamespace;
 
 use Symfony\Component\HttpFoundation\Response;
 
