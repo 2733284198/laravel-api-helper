@@ -17,15 +17,13 @@ class ApiServiceProvider extends ServiceProvider
             __DIR__.'/Config/apihelper.php' => config_path('apihelper.php'),
         ], 'config');
 
-        // 发布基础控制器
-        $this->publishes([
-            __DIR__.'/Controllers/ApiController.tpl' => app_path('Http//Controllers/Api/ApiController.php'),
-            __DIR__.'/Services/ResponseServe.tpl' => app_path('Http/Services/ResponseServe.php'),
-        ]);
 
         // 绑定需要注册的命令
         if ($this->app->runningInConsole()) {
             $this->commands([
+                // 创建基础类
+
+                // 创建 API 控制器
                 MakeApiController::class,
             ]);
         }
@@ -37,5 +35,6 @@ class ApiServiceProvider extends ServiceProvider
     public function register()
     {
         //
+
     }
 }

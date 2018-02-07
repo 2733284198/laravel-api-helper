@@ -3,6 +3,7 @@
 namespace DavidNineRoc\ApiHelper\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,8 +16,14 @@ class MakeApiController extends GeneratorCommand
 
     protected $type = 'Controller';
 
+    public function __construct(Filesystem $files)
+    {
+        parent::__construct($files);
+    }
+
     protected function getStub()
     {
+        dd($this);
         if ($this->option('parent')) {
             return __DIR__.'/../Controllers/NestedController.tpl';
         } elseif ($this->option('model')) {
@@ -29,7 +36,7 @@ class MakeApiController extends GeneratorCommand
     }
 
     /**
-     * 获取默认命名空间
+     * 获取控制器默认命名空间
      *
      * @param string $rootNamespace
      *
@@ -37,7 +44,7 @@ class MakeApiController extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.config('apihelper.namespace', '\Http\Controllers\Api');
+        return $rootNamespace.config('apihelper.controller_namespace', '\Http\Controllers\Api');
     }
 
     /**
@@ -69,6 +76,55 @@ class MakeApiController extends GeneratorCommand
         return str_replace(
             array_keys($replace), array_values($replace), parent::buildClass($name)
         );
+    }
+
+    /**
+     * 重写父类替换方法，因为 ApiController 的命名空间也是动态的
+     *
+     * @param  string  $stub
+     * @param  string  $name
+     * @return $this
+     */
+    public function replaceNamespace(&$stub, $name)
+    {
+        $stub = str_replace(
+            [
+                'DummyNamespace',
+                'DummyRootNamespace',
+                'NamespacedDummyUserModel',
+                'DummyApiNamespace',
+                'DummyApiName'
+            ],
+            [
+                $this->getNamespace($name),
+                $this->rootNamespace(),
+                config('auth.providers.users.model'),
+                $this->getApiNamespace(),
+                $this->getApiName(),
+            ],
+            $stub
+        );
+
+        return $this;
+    }
+
+    /**
+     * 获取 Api 基类的命名空间
+     * @return string
+     */
+    protected function getApiNamespace()
+    {
+        $namespace = config('apihelper.base_api_namespace', '\App\Http\Controllers\Api');
+        return ltrim($namespace, '\\/');
+    }
+
+    /**
+     * 获取 Api 基类的名字
+     * @return string
+     */
+    protected function getApiName()
+    {
+        return config('apihelper.base_api_name', 'ApiController');
     }
 
     /**
