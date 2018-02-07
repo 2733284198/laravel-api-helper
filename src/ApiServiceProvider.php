@@ -3,7 +3,6 @@
 namespace DavidNineRoc\ApiHelper;
 
 use DavidNineRoc\ApiHelper\Commands\MakeApiController;
-use DavidNineRoc\ApiHelper\Commands\MakeBaseApi;
 use Illuminate\Support\ServiceProvider;
 
 class ApiServiceProvider extends ServiceProvider

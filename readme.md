@@ -1,4 +1,4 @@
-### APi
+### api-helper
 
 ## Install
 ```php
@@ -71,3 +71,6 @@ class UserController extends ApiController
     }
 }
 ```
+## Notices
+* 如果在控制器中找不到`create`和`edit`方法，不要惊讶，因为`API`开发中不需要这两个方法，请配合使用`Route::apiResource();`
+* 使用`Eloquent: API Resources`转换模型数据
