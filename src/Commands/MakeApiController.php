@@ -3,7 +3,6 @@
 namespace DavidNineRoc\ApiHelper\Commands;
 
 use Illuminate\Console\GeneratorCommand;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputOption;
@@ -18,13 +17,11 @@ class MakeApiController extends GeneratorCommand
 
     protected $type = 'Controller';
 
-    public function __construct(Filesystem $files)
-    {
-        parent::__construct($files);
-    }
-
     protected function getStub()
     {
+        // 创建 API 基类
+        $this->createBase();
+
         if ($this->option('parent')) {
             return __DIR__.'/../Controllers/NestedController.tpl';
         } elseif ($this->option('model')) {
@@ -94,7 +91,8 @@ class MakeApiController extends GeneratorCommand
                 'DummyRootNamespace',
                 'NamespacedDummyUserModel',
                 'DummyApiNamespace',
-                'DummyApiName'
+                'DummyApiName',
+                'DummyServicesNamespace',
             ],
             [
                 $this->getNamespace($name),
@@ -102,6 +100,7 @@ class MakeApiController extends GeneratorCommand
                 config('auth.providers.users.model'),
                 $this->getApiNamespace(),
                 $this->getApiName(),
+                $this->getServicesNamespace()
             ],
             $stub
         );
@@ -191,5 +190,43 @@ class MakeApiController extends GeneratorCommand
 
             ['parent', 'p', InputOption::VALUE_OPTIONAL, 'Generate a nested resource controller class.'],
         ];
+    }
+
+    protected function createBase()
+    {
+        $files = [
+            'ResponseService' => [
+                'full_name' => $this->getFullServiceName(),
+                'file' => __DIR__.'/../Services/ResponseServe.tpl'
+
+            ],
+            'ApiController' => [
+                'full_name' => $this->getFullApiName(),
+                'file' => __DIR__.'/../Controllers/ApiController.tpl'
+            ]
+        ];
+
+        foreach ($files as $key => $class) {
+            $this->createFromName($key, $class);
+        }
+    }
+
+    protected function createFromName($key, $class)
+    {
+        $name = $this->qualifyClass($class['full_name']);
+        $path = $this->getPath($name);
+
+        if ($this->alreadyExists($class['full_name'])) {
+            // $this->error($this->type.' already exists!');
+            return false;
+        }
+
+        $this->makeDirectory($path);
+
+        $stub = $this->files->get($class['file']);
+
+        $this->files->put($path, $this->replaceNamespace($stub, '')->replaceClass($stub, ''));
+
+        $this->info("{$key} created successfully.");
     }
 }

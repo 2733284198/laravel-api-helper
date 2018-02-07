@@ -22,8 +22,6 @@ class ApiServiceProvider extends ServiceProvider
         // 绑定需要注册的命令
         if ($this->app->runningInConsole()) {
             $this->commands([
-                // 创建基础类
-                MakeBaseApi::class,
                 // 创建 API 控制器
                 MakeApiController::class,
             ]);
