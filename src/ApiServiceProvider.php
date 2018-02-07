@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 class ApiServiceProvider extends ServiceProvider
 {
+
     /**
      * Bootstrap the application services.
      *
@@ -13,7 +14,11 @@ class ApiServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        dd($this);
+        // 生成控制器
+        $this->publishes([
+            __DIR__ . '/Controllers/Api/ApiController.tpl' => app_path('Http//Controllers/Api/ApiController.php'),
+            __DIR__ . '/Services/ResponseServe.tpl' => app_path('Http/Services/ResponseServe.php')
+        ]);
     }
 
     /**
