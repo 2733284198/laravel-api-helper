@@ -192,13 +192,19 @@ class MakeApiController extends GeneratorCommand
         ];
     }
 
+    /**
+     * 创建基础层的文件
+     */
     protected function createBase()
     {
         $files = [
+            'StatusServe' => [
+                'full_name' => $this->getServicesNamespace().'/StatusServe',
+                'file' => __DIR__.'/../Services/StatusServe.tpl.tpl'
+            ],
             'ResponseService' => [
-                'full_name' => $this->getFullServiceName(),
+                'full_name' => $this->getServicesNamespace().'/ResponseServe',
                 'file' => __DIR__.'/../Services/ResponseServe.tpl'
-
             ],
             $this->getApiName() => [
                 'full_name' => $this->getFullApiName(),

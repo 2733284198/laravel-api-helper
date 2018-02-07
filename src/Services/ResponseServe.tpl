@@ -2,8 +2,6 @@
 
 namespace DummyServicesNamespace;
 
-use Symfony\Component\HttpFoundation\Response;
-
 trait ResponseServe
 {
     /**
@@ -16,7 +14,7 @@ trait ResponseServe
      * 消息内容
      * @var string
      */
-    protected $msg = 'SUCCESS';
+    protected $msg = '';
 
     /**
      * 数据
@@ -38,7 +36,7 @@ trait ResponseServe
      */
     public function created($msg = '资源创建成功', array $data = [])
     {
-        return $this->setCode(Response::HTTP_CREATED)
+        return $this->setCode(StatusServe::HTTP_CREATED)
             ->setMsg($msg)
             ->setData($data)
             ->toJson();
@@ -53,7 +51,7 @@ trait ResponseServe
      */
     public function serviceUnavailable($msg = '服务器未知出错')
     {
-        return $this->setCode(Response::HTTP_SERVICE_UNAVAILABLE)
+        return $this->setCode(StatusServe::HTTP_SERVICE_UNAVAILABLE)
             ->setMsg($msg)
             ->toJson();
     }
@@ -66,7 +64,7 @@ trait ResponseServe
      */
     public function forbidden($msg = '权限不足')
     {
-        return $this->setCode(Response::HTTP_FORBIDDEN)
+        return $this->setCode(StatusServe::HTTP_FORBIDDEN)
             ->setMsg($msg)
             ->toJson();
     }
@@ -79,14 +77,14 @@ trait ResponseServe
      */
     public function unAuthorized($msg = '身份验证失败')
     {
-        return $this->setCode(Response::HTTP_UNAUTHORIZED)
+        return $this->setCode(StatusServe::HTTP_UNAUTHORIZED)
             ->setMsg($msg)
             ->toJson();
     }
 
     public function notFound($msg = '请求页面找不到')
     {
-        return $this->setCode(Response::HTTP_NOT_FOUND)
+        return $this->setCode(StatusServe::HTTP_NOT_FOUND)
             ->setMsg($msg)
             ->toJson();
     }
@@ -98,7 +96,7 @@ trait ResponseServe
      */
     public function badRequest($msg = '表单验证出错')
     {
-        return $this->setCode(Response::HTTP_BAD_REQUEST)
+        return $this->setCode(StatusServe::HTTP_BAD_REQUEST)
             ->setMsg($msg)
             ->toJson();
     }
@@ -125,6 +123,9 @@ trait ResponseServe
      */
     protected function formatResponse()
     {
+        // 如果响应消息从未被设置过，则去取默认的消息
+        $this->msg = empty($this->msg) ? StatusServe::getStatusMsg($this->code) : $this->msg;
+
         $response = [
             'code' => $this->code,
             'msg' => $this->msg,
@@ -132,7 +133,7 @@ trait ResponseServe
         ];
 
         /**
-         * 如果有扩展字段，依次加入
+         * 如果有扩展字段，依次加入响应内容中
          */
         if (! empty($this->extendField)) {
             foreach ($this->extendField as $key => $value) {

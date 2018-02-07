@@ -2,7 +2,7 @@
 
 return [
     /**
-     * 响应类的命名空间
+     * 服务层的命名空间
      */
     'service_namespace' => '\App\Services',
 

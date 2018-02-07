@@ -4,16 +4,6 @@ namespace DavidNineRoc\ApiHelper\Commands;
 
 trait ApiCommand
 {
-
-    /**
-     * 获取响应基类的完整名字
-     * @return string
-     */
-    protected function getFullServiceName()
-    {
-        return rtrim($this->getServicesNamespace(), '\\/') . '/ResponseServe';
-    }
-
     /**
      * 获取服务层的命名空间
      * @return string
@@ -21,7 +11,7 @@ trait ApiCommand
     protected function getServicesNamespace()
     {
         $namespace = config('apihelper.service_namespace', '\App\Services');
-        return ltrim($namespace, '\\/');
+        return trim($namespace, '\\/');
     }
 
     /**

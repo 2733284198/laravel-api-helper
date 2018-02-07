@@ -5,11 +5,12 @@
 composer require davidnineroc/laravel-api-helper
 ```
 ## Usage
+* 可以把`app/Http/Controllers`这个目录删除了
 * 生成配置文件 (按需配置)
 ```php
 php artisan vendor:publish --tag=config
 ```
-* (之后就可以正常的使用了)生成 API 控制器
+* 创建一个控制器
 ```php
 php artisan make:apiController UserController --resource
 ```
@@ -21,6 +22,11 @@ namespace App\Http\Controllers\Api;
 
 class UserController extends ApiController
 {
+    public function error()
+    {
+        $this->notFound('请求数据不存在');
+    }
+        
     public function login()
     {
         // 表单验证失败
@@ -34,7 +40,9 @@ class UserController extends ApiController
     
     public function store()
     {
-        return $this->created('用户注册成功');
+        $user = User::create([]);
+        
+        return $this->created('用户注册成功', $user);
     }
     
     public function show(User $user)
@@ -49,16 +57,11 @@ class UserController extends ApiController
                     ->toJson();
     }
     
-    public function error()
-    {
-        $this->notFound('请求数据不存在');
-    }
-    
     public function other()
     {
         $users = User::all();
         
-        // 有时，你会需要返回更多的字段
+        // 有时，你可能需要返回更多的字段
         $this->setCode(200)
             ->setMsg('SUCCESS')
             ->setData($users)
