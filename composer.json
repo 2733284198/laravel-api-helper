@@ -1,0 +1,40 @@
+{
+    "name": "davidnineroc/laravel-api-helper",
+    "description": "laravel 开发 API 助手！",
+    "keywords": ["DavidNineRoc", "laravel", "API", "helper"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "DavidNineRoc",
+            "email": "1033404553@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "DavidNineRoc\\ApiHelper\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "6.2"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DavidNineRoc\\ApiHelper\\ApiServiceProvider"
+            ]
+        }
+    },
+    "suggest": {
+        "davidnineroc/laravel-api-helper": "API开发小助手"
+    }
+}
