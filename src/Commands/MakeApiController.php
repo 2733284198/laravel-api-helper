@@ -200,7 +200,7 @@ class MakeApiController extends GeneratorCommand
                 'file' => __DIR__.'/../Services/ResponseServe.tpl'
 
             ],
-            'ApiController' => [
+            $this->getApiName() => [
                 'full_name' => $this->getFullApiName(),
                 'file' => __DIR__.'/../Controllers/ApiController.tpl'
             ]
