@@ -3,6 +3,7 @@
 namespace DavidNineRoc\ApiHelper;
 
 use DavidNineRoc\ApiHelper\Commands\MakeApiController;
+use DavidNineRoc\ApiHelper\Commands\MakeBaseApi;
 use Illuminate\Support\ServiceProvider;
 
 class ApiServiceProvider extends ServiceProvider
@@ -22,7 +23,7 @@ class ApiServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 // 创建基础类
-
+                MakeBaseApi::class,
                 // 创建 API 控制器
                 MakeApiController::class,
             ]);
