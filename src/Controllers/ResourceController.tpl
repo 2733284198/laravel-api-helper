@@ -8,9 +8,9 @@ use DummyApiNamespace\DummyApiName;
 class DummyClass extends DummyApiName
 {
     /**
-     * Display a listing of the resource.
+     * 显示资源列表。
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -18,20 +18,10 @@ class DummyClass extends DummyApiName
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * 存储一个新创建的资源存储。
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -39,10 +29,10 @@ class DummyClass extends DummyApiName
     }
 
     /**
-     * Display the specified resource.
+     * 显示指定的资源。
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
@@ -50,22 +40,11 @@ class DummyClass extends DummyApiName
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * 更新存储中的指定资源。
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
@@ -73,10 +52,10 @@ class DummyClass extends DummyApiName
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 从存储区中移除指定的资源。
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {

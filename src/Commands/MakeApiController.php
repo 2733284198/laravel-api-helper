@@ -200,7 +200,7 @@ class MakeApiController extends GeneratorCommand
         $files = [
             'StatusServe' => [
                 'full_name' => $this->getServicesNamespace().'/StatusServe',
-                'file' => __DIR__.'/../Services/StatusServe.tpl.tpl'
+                'file' => __DIR__.'/../Services/StatusServe.tpl'
             ],
             'ResponseService' => [
                 'full_name' => $this->getServicesNamespace().'/ResponseServe',

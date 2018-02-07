@@ -10,10 +10,10 @@ use DummyApiNamespace\DummyApiName;
 class DummyClass extends DummyApiName
 {
     /**
-     * Display a listing of the resource.
+     * 显示资源列表。
      *
      * @param  \ParentDummyFullModelClass  $ParentDummyModelVariable
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(ParentDummyModelClass $ParentDummyModelVariable)
     {
@@ -21,22 +21,11 @@ class DummyClass extends DummyApiName
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @param  \ParentDummyFullModelClass  $ParentDummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function create(ParentDummyModelClass $ParentDummyModelVariable)
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * 存储一个新创建的资源存储。
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \ParentDummyFullModelClass  $ParentDummyModelVariable
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request, ParentDummyModelClass $ParentDummyModelVariable)
     {
@@ -44,11 +33,11 @@ class DummyClass extends DummyApiName
     }
 
     /**
-     * Display the specified resource.
+     * 显示指定的资源。
      *
      * @param  \ParentDummyFullModelClass  $ParentDummyModelVariable
      * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(ParentDummyModelClass $ParentDummyModelVariable, DummyModelClass $DummyModelVariable)
     {
@@ -56,24 +45,12 @@ class DummyClass extends DummyApiName
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \ParentDummyFullModelClass  $ParentDummyModelVariable
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ParentDummyModelClass $ParentDummyModelVariable, DummyModelClass $DummyModelVariable)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * 更新存储中的指定资源。
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \ParentDummyFullModelClass  $ParentDummyModelVariable
      * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, ParentDummyModelClass $ParentDummyModelVariable, DummyModelClass $DummyModelVariable)
     {
@@ -81,11 +58,11 @@ class DummyClass extends DummyApiName
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 从存储区中移除指定的资源。
      *
      * @param  \ParentDummyFullModelClass  $ParentDummyModelVariable
      * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(ParentDummyModelClass $ParentDummyModelVariable, DummyModelClass $DummyModelVariable)
     {
