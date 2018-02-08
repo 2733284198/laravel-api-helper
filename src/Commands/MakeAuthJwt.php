@@ -2,8 +2,10 @@
 
 namespace DavidNineRoc\ApiHelper\Commands;
 
+use App\Providers\RouteServiceProvider;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Filesystem\Filesystem;
+use ReflectionClass;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class MakeAuthJwt extends BaseMakeCommand
@@ -36,21 +38,25 @@ class MakeAuthJwt extends BaseMakeCommand
     public function handle()
     {
         // 发布配置
-//        $this->call('vendor:publish', [ '--provider' => 'Tymon\JWTAuth\Providers\LaravelServiceProvider']);
-//        // 生成密钥
-//        $this->call('jwt:secret');
-//        // 合并 config/auth.php 配置
-//        $this->mergeAuthConfig(
-//            config_path('auth.php')
-//        );
+        $this->call('vendor:publish', [ '--provider' => 'Tymon\JWTAuth\Providers\LaravelServiceProvider']);
+        // 生成密钥
+        $this->call('jwt:secret');
 
-        // 修改 User 模型
+
+        // 更新您的用户模型
         $this->updateUserModel();
 
-        // 写入路由
+        // 配置身份验证警戒
+        $this->mergeAuthConfig(
+            config_path('auth.php')
+        );
 
-        // 发布控制器
-        $this->publishAuthController();
+        // 添加一些基本的认证路由
+        $authController = $this->getDefaultNamespace('').'/AuthController';
+        $this->addAuthRoutes($authController);
+
+        // 创建 AuthController
+        $this->publishAuthController($authController);
     }
 
     /**
@@ -75,27 +81,50 @@ class MakeAuthJwt extends BaseMakeCommand
             $count > 0 &&
             $this->files->put($path, $config) == strlen($config)
         ) {
-            $this->info('auth configure success');
+            $this->info('Auth configure update success');
         } else {
-            $this->info('please configure manually config/auth.php');
+            $this->info('Auth config no updates');
         }
     }
 
     /**
-     * 发布有关验证的控制器
+     * 添加基本的验证路由
+     * @param $authController
      */
-    protected function publishAuthController()
+    protected function addAuthRoutes($authController)
     {
-        // 创建基类
-        $this->createBase();
+        // 默认的命名空间 'App\Http\Controllers'
+        $baseNameSpace = $this->getRouteBaseNamespace();
 
-        $this->createFromName(
-            $this->getDefaultNamespace('').'/AuthController',
-            __DIR__.'/../Auth/AuthController.tpl',
-            'AuthController'
+        $authController = ltrim($authController, '\\/');
+        // 去除掉基础部分
+        $authController = str_after($authController, $baseNameSpace);
+        $authController = ltrim($authController, '\\/');
+        // 把命名空间的 / 换回 \
+        $authController = str_replace('/', '\\', $authController);
+
+        $routes = <<<routes
+        
+Route::prefix('auth')->middleware('api')->group(function () {
+    Route::post('login', '{$authController}@login');
+    Route::post('logout', '{$authController}@logout');
+    Route::post('refresh', '{$authController}@refresh');
+    Route::post('me', '{$authController}@me');
+});
+routes;
+
+        // 写入到 api 文件
+        $this->files->append(
+            base_path('routes/api.php'),
+            $routes
         );
+
+        $this->info('Route add success');
     }
 
+    /**
+     * 更新 User 模型使其实现 JWTSubject 接口。
+     */
     protected function updateUserModel()
     {
         // 先获取到 模型，
@@ -111,10 +140,13 @@ class MakeAuthJwt extends BaseMakeCommand
         }
 
         $this->info('User implements JWTSubject');
-        dd();
-
     }
 
+    /**
+     * 让模型实现接口，增加方法
+     * 并写入到原来的模型文件。
+     * @param $model
+     */
     protected function implementInterface($model)
     {
         // 根据命名空间得到文件路径
@@ -170,5 +202,41 @@ method;
         );
 
         $this->files->put($path, $content);
+    }
+
+    /**
+     * 发布有关验证的控制器
+     * @param $authController
+     */
+    protected function publishAuthController($authController)
+    {
+        // 创建基类
+        $this->createBase();
+
+        $this->createFromName(
+            $authController,
+            __DIR__.'/../Auth/AuthController.tpl',
+            'AuthController'
+        );
+    }
+
+    /**
+     * 获取 RouteServiceProvider 默认的命名空间
+     * @return mixed
+     */
+    protected function getRouteBaseNamespace()
+    {
+        $ref = new ReflectionClass(RouteServiceProvider::class);
+        // 获取路由对应的命名空间
+        $namespace = $ref->getProperty('namespace');
+        // 获取路由服务提供者实例
+        $route = app()->make(
+            RouteServiceProvider::class,
+            ['app' => app()]
+        );
+
+        // 设置属性可以访问
+        $namespace->setAccessible(true);
+        return $namespace->getValue($route);
     }
 }

@@ -15,6 +15,18 @@ php artisan vendor:publish --provider=DavidNineRoc\ApiHelper\ApiServiceProvider
 ```php
 php artisan make:apiController UserController --resource
 ```
+* 快速完成登录相关 (基于 [jwt-auth](https://github.com/tymondesigns/jwt-auth))
+```php
+php artisan make:apiAuth
+```
+> `make:apiAuth` 会产生一下事情：
+> 1. 发布`config/jwt.php`配置文件
+> 2. `.env`文件生成秘钥
+> 3. 修改`User`模型使其实现`JWTSubject`接口
+> 4. 更新`config/auth.php`文件
+> 5. 在`routes/api.php`增加相关路由
+> 6. 生成`AuthController`，具体目录查看`config/apihelper.php`配置
+> 7. 访问`domain/api/auth/login`便可以进行登录了
 ## Example
 ```php
 <?php
@@ -72,6 +84,9 @@ class UserController extends ApiController
     }
 }
 ```
-## Notices
+## Recommend
 * 如果在控制器中找不到`create`和`edit`方法，不要惊讶，因为`API`开发中不需要这两个方法，请配合使用`Route::apiResource();`
 * 使用`Eloquent: API Resources`转换模型数据
+## Errors
+* 出现模型修改错误
+    * 确保`config/auth.php=>providers=>users=>model`配置正确了`User`模型
