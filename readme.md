@@ -1,25 +1,27 @@
 # api-helper
 ****
 ## Requirement
-* Laravel 5.5
-## Install
+* PHP 7.1
+* Laravel 5.5.*
+## Installation & Usage
+* 使用`composer`安装
 ```php
 composer require davidnineroc/laravel-api-helper
 ```
-## Usage
 * 发布文件 (开始之前你完全可以把`app\Http\Controllers`目录删除了，然后按需配置)
 ```php
 php artisan vendor:publish --provider=DavidNineRoc\ApiHelper\ApiServiceProvider
 ```
-* 创建一个控制器
+* 创建一个资源控制器
 ```php
 php artisan make:apiController UserController --resource
 ```
+## Example
 * 快速完成登录相关 (基于 [jwt-auth](https://github.com/tymondesigns/jwt-auth))
 ```php
 php artisan make:apiAuth
 ```
-> `make:apiAuth` 会产生一下事情：
+> `make:apiAuth` 会产生以下事情：
 > 1. 发布`config/jwt.php`配置文件
 > 2. `.env`文件生成秘钥
 > 3. 修改`User`模型使其实现`JWTSubject`接口
@@ -27,7 +29,7 @@ php artisan make:apiAuth
 > 5. 在`routes/api.php`增加相关路由
 > 6. 生成`AuthController`，具体目录查看`config/apihelper.php`配置
 > 7. 访问`domain/api/auth/login`便可以进行登录了
-## Example
+****
 ```php
 <?php
 
