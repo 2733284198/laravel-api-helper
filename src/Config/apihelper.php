@@ -18,5 +18,5 @@ return [
     /**
      * php artisan make:apiController 创建控制器的基础目录
      */
-    'controller_namespace' => '\Http\Controllers'
+    'controller_namespace' => '\App\Http\Controllers'
 ];

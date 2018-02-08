@@ -21,8 +21,6 @@ class ApiServiceProvider extends ServiceProvider
             'config'
         );
 
-
-
         if ($this->app->runningInConsole()) {
             $this->commands([
                 // 创建 API 控制器

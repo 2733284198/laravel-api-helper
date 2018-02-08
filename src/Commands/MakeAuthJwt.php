@@ -2,11 +2,9 @@
 
 namespace DavidNineRoc\ApiHelper\Commands;
 
-use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Config;
 
-class MakeAuthJwt extends Command
+class MakeAuthJwt extends BaseMakeCommand
 {
     /**
      * The name and signature of the console command.
@@ -23,14 +21,10 @@ class MakeAuthJwt extends Command
     protected $description = '创建 jwt 方式登录验证';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
+     * 文件操作实例
+     * @var Filesystem
      */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $files;
 
     /**
      * Execute the console command.
@@ -40,20 +34,27 @@ class MakeAuthJwt extends Command
     public function handle()
     {
         // 发布配置
-        $this->call('vendor:publish', [ '--provider' => 'Tymon\JWTAuth\Providers\LaravelServiceProvider']);
-        // 生成密钥
-        $this->call('jwt:secret');
-        // 合并 config/auth.php 配置
-        $this->mergeAuthConfig(
-            config_path('auth.php')
-        );
+//        $this->call('vendor:publish', [ '--provider' => 'Tymon\JWTAuth\Providers\LaravelServiceProvider']);
+//        // 生成密钥
+//        $this->call('jwt:secret');
+//        // 合并 config/auth.php 配置
+//        $this->mergeAuthConfig(
+//            config_path('auth.php')
+//        );
+
+        // 写入路由
+
+        // 发布控制器
+        $this->publishAuthController();
     }
 
+    /**
+     * 把 jwt-auth 所需的配置合并到 config/auth.php 中
+     * @param $path
+     */
     public function mergeAuthConfig($path)
     {
-        $files = new Filesystem();
-
-        $config = $files->get($path);
+        $config = $this->files->get($path);
 
         $search  = [
             "'guard' => 'web'",
@@ -67,11 +68,23 @@ class MakeAuthJwt extends Command
 
         if (
             $count > 0 &&
-            $files->put($path, $config) == strlen($config)
+            $this->files->put($path, $config) == strlen($config)
         ) {
             $this->info('auth configure success');
         } else {
             $this->info('please configure manually config/auth.php');
         }
+    }
+
+    protected function publishAuthController()
+    {
+        // 创建基类
+        $this->createBase();
+
+        $this->createFromName(
+            $this->getDefaultNamespace('').'/AuthController',
+            __DIR__.'/../Auth/AuthController.tpl',
+            'AuthController'
+        );
     }
 }

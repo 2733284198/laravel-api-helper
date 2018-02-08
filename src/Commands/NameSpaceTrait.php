@@ -2,7 +2,7 @@
 
 namespace DavidNineRoc\ApiHelper\Commands;
 
-trait ApiCommand
+trait NameSpaceTrait
 {
     /**
      * 获取服务层的命名空间。

@@ -2,15 +2,12 @@
 
 namespace DavidNineRoc\ApiHelper\Commands;
 
-use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputOption;
 
-class MakeApiController extends GeneratorCommand
+class MakeApiController extends BaseMakeCommand
 {
-    use ApiCommand;
-
     /**
      * 控制台命令。
      * @var string
@@ -50,18 +47,6 @@ class MakeApiController extends GeneratorCommand
     }
 
     /**
-     * 获取控制器默认命名空间。
-     *
-     * @param string $rootNamespace
-     *
-     * @return string
-     */
-    protected function getDefaultNamespace($rootNamespace)
-    {
-        return $rootNamespace.config('apihelper.controller_namespace', '\Http\Controllers\Api');
-    }
-
-    /**
      * 使用给定的名称构建类。
      *
      * 如果我们已经在基命名空间中，则删除基本控制器导入。
@@ -90,38 +75,6 @@ class MakeApiController extends GeneratorCommand
         return str_replace(
             array_keys($replace), array_values($replace), parent::buildClass($name)
         );
-    }
-
-    /**
-     * 重写父类替换方法，因为 ApiController 的命名空间也是动态的。
-     *
-     * @param  string  $stub
-     * @param  string  $name
-     * @return $this
-     */
-    public function replaceNamespace(&$stub, $name)
-    {
-        $stub = str_replace(
-            [
-                'DummyNamespace',
-                'DummyRootNamespace',
-                'NamespacedDummyUserModel',
-                'DummyApiNamespace',
-                'DummyApiName',
-                'DummyServicesNamespace',
-            ],
-            [
-                $this->getNamespace($name),
-                $this->rootNamespace(),
-                config('auth.providers.users.model'),
-                $this->getApiNamespace(),
-                $this->getApiName(),
-                $this->getServicesNamespace()
-            ],
-            $stub
-        );
-
-        return $this;
     }
 
     /**
@@ -206,55 +159,5 @@ class MakeApiController extends GeneratorCommand
 
             ['parent', 'p', InputOption::VALUE_OPTIONAL, 'Generate a nested resource controller class.'],
         ];
-    }
-
-    /**
-     * 创建基础层的文件。
-     */
-    protected function createBase()
-    {
-        $files = [
-            'StatusServe' => [
-                'full_name' => $this->getServicesNamespace().'/StatusServe',
-                'file' => __DIR__.'/../Services/StatusServe.tpl'
-            ],
-            'ResponseService' => [
-                'full_name' => $this->getServicesNamespace().'/ResponseServe',
-                'file' => __DIR__.'/../Services/ResponseServe.tpl'
-            ],
-            $this->getApiName() => [
-                'full_name' => $this->getFullApiName(),
-                'file' => __DIR__.'/../Controllers/ApiController.tpl'
-            ]
-        ];
-
-        foreach ($files as $key => $class) {
-            $this->createFromName($key, $class);
-        }
-    }
-
-    /**
-     * 根据给定的 key class 创建文件。
-     * @param $key
-     * @param $class
-     * @return bool
-     */
-    protected function createFromName($key, $class)
-    {
-        $name = $this->qualifyClass($class['full_name']);
-        $path = $this->getPath($name);
-
-        if ($this->alreadyExists($class['full_name'])) {
-            // $this->error($this->type.' already exists!');
-            return false;
-        }
-
-        $this->makeDirectory($path);
-
-        $stub = $this->files->get($class['file']);
-
-        $this->files->put($path, $this->replaceNamespace($stub, '')->replaceClass($stub, ''));
-
-        $this->info("{$key} created successfully.");
     }
 }
