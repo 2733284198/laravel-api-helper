@@ -12,7 +12,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "tymon/jwt-auth": "1.0.x-dev"
     },
     "autoload": {
         "psr-4": {

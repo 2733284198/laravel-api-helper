@@ -1,14 +1,15 @@
-### api-helper
-
+# api-helper
+****
+## Requirement
+* Laravel 5.5
 ## Install
 ```php
 composer require davidnineroc/laravel-api-helper
 ```
 ## Usage
-* 可以把`app/Http/Controllers`这个目录删除了
-* 生成配置文件 (按需配置)
+* 发布文件 (开始之前你完全可以把`app\Http\Controllers`目录删除了，然后按需配置)
 ```php
-php artisan vendor:publish --tag=config
+php artisan vendor:publish --provider=DavidNineRoc\ApiHelper\ApiServiceProvider
 ```
 * 创建一个控制器
 ```php
