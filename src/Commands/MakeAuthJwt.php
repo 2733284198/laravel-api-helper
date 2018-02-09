@@ -308,10 +308,21 @@ search;
         $apiController = $this->getFullApiName();
 
         $replace = <<<replace
-if (\$exception instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException) {
+        /**
+         * 拦截 token 异常抛出的错误 (token 不存在，token 找不到用户 ...)
+         */
+        if (\$exception instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException) {
+
             return (new {$apiController})->setCode(\$exception->getCode())
                 ->setMsg("[token]不合法 [{\$exception->getMessage()}]")
                 ->toJson();
+        } elseif (\$exception instanceof \Illuminate\Validation\ValidationException) {
+            /**
+             * 拦截表单验证错误抛出的异常
+             */
+            return (new {$apiController})->badRequest(
+                \$exception->validator->errors()->first()
+            );
         }
 
         return parent::render(\$request, \$exception);
