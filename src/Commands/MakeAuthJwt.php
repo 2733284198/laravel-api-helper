@@ -68,6 +68,27 @@ class MakeAuthJwt extends BaseMakeCommand
     }
 
     /**
+     * 更新 User 模型使其实现 JWTSubject 接口。
+     */
+    protected function updateUserModel()
+    {
+        // 先获取到 模型，
+        $model = config('auth.providers.users.model', '\App\User');
+
+        if (!class_exists($model)) {
+            throw new ModelNotFoundException('User 模型不存在，请配置 auth.providers.users.model 参数');
+        }
+
+        // 如果还没有实现 JWTSubject 接口
+        if (!app()->make($model) instanceof JWTSubject) {
+            $this->implementInterface($model);
+            $this->info('1] User implements JWTSubject');
+        } else {
+            $this->info('1] User no update');
+        }
+    }
+
+    /**
      * 把 jwt-auth 所需的配置合并到 config/auth.php 中.
      *
      * @param $path
@@ -90,9 +111,9 @@ class MakeAuthJwt extends BaseMakeCommand
             $count > 0 &&
             $this->files->put($path, $config) === strlen($config)
         ) {
-            $this->info('Auth configure update success');
+            $this->info('2] Auth configure update success');
         } else {
-            $this->info('Auth config no updates');
+            $this->info('2] Auth config no updates');
         }
     }
 
@@ -114,7 +135,6 @@ class MakeAuthJwt extends BaseMakeCommand
         $authController = str_replace('/', '\\', $authController);
 
         $routes = <<<routes
-        
 Route::prefix('auth')->middleware('api')->group(function () {
     Route::post('login', '{$authController}@login');
     Route::post('logout', '{$authController}@logout');
@@ -123,33 +143,20 @@ Route::prefix('auth')->middleware('api')->group(function () {
 });
 routes;
 
-        // 写入到 api 文件
-        $this->files->append(
-            base_path('routes/api.php'),
-            $routes
-        );
+        $routeFile = base_path('routes/api.php');
 
-        $this->info('Route add success');
-    }
+        // 文件中没有当前内容才写入
+        if (! $this->hasContentInFile($routeFile, $routes)) {
+            // 写入到 api 文件
+            $this->files->append(
+                $routeFile,
+                $routes
+            );
 
-    /**
-     * 更新 User 模型使其实现 JWTSubject 接口。
-     */
-    protected function updateUserModel()
-    {
-        // 先获取到 模型，
-        $model = config('auth.providers.users.model', '\App\User');
-
-        if (!class_exists($model)) {
-            throw new ModelNotFoundException('User 模型不存在，请配置 auth.providers.users.model 参数');
+            $this->info('3] Route add success');
+        } else {
+            $this->info('3] Route no update');
         }
-
-        // 如果还没有实现 JWTSubject 接口
-        if (!app()->make($model) instanceof JWTSubject) {
-            $this->implementInterface($model);
-        }
-
-        $this->info('User implements JWTSubject');
     }
 
     /**
@@ -222,12 +229,28 @@ method;
     protected function publishAuthController($authController)
     {
         // 创建基类
-        $this->createBase();
+        $this->createBase(
+            function ($class) {
+                return function() use ($class) {
+                    $this->info("4] {$class} no update");
+                };
+            },
+            function ($class) {
+                return function() use ($class) {
+                    $this->info("4] {$class} create success");
+                };
+            }
+        );
 
         $this->createFromName(
             $authController,
             __DIR__.'/../Auth/AuthController.tpl',
-            'AuthController'
+            function () {
+                $this->info('4] AuthController no update');
+            },
+            function () {
+                $this->info('4] AuthController create success');
+            }
         );
     }
 
@@ -277,10 +300,15 @@ if (\$exception instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedH
 replace;
 
         $content = $this->files->get($handlePath);
-        $content = str_replace($search, $replace, $content);
 
-        $this->files->put($handlePath, $content);
+        // 如果已经写入过，不用重复
+        if (! $this->hasContentInFile($content, $replace)) {
+            $content = str_replace($search, $replace, $content);
+            $this->files->put($handlePath, $content);
 
-        $this->info('Handler update success');
+            $this->info('5] Handler update success');
+        } else {
+            $this->info('5] Handler no update');
+        }
     }
 }

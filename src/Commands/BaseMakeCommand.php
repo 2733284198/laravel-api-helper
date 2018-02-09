@@ -2,6 +2,7 @@
 
 namespace DavidNineRoc\ApiHelper\Commands;
 
+use Closure;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
@@ -66,8 +67,10 @@ class BaseMakeCommand extends GeneratorCommand
      * 状态响应码文件
      * JSON 响应类
      * Api 基类。
+     * @param Closure $existsRunFunction
+     * @param Closure $createdRunFunction
      */
-    protected function createBase()
+    protected function createBase(Closure $existsRunFunction, Closure $createdRunFunction)
     {
         $files = [
             'StatusServe' => [
@@ -85,7 +88,13 @@ class BaseMakeCommand extends GeneratorCommand
         ];
 
         foreach ($files as $key => $class) {
-            $this->createFromName($class['full_name'], $class['file'], $key);
+
+            $this->createFromName(
+                $class['full_name'],
+                $class['file'],
+                $existsRunFunction($key),
+                $createdRunFunction($key)
+            );
         }
     }
 
@@ -96,29 +105,34 @@ class BaseMakeCommand extends GeneratorCommand
      *
      * @param $fullName
      * @param $filePath
-     * @param string $typeInfo
-     *
+     * @param null $existsRunFunction
+     * @param null $createdRunFunction
      * @return bool
      */
-    protected function createFromName($fullName, $filePath, $typeInfo = '')
+    protected function createFromName($fullName, $filePath, $existsRunFunction = null, $createdRunFunction = null)
     {
         // 获取过滤之后的路径
         $name = $this->qualifyClass($fullName);
         // 根据命名空间得到文件路径
         $path = $this->getPath($name);
 
+        // 下标
         if ($this->alreadyExists($fullName)) {
-            // $this->error($this->type.' already exists!');
+            if ($existsRunFunction instanceof Closure) {
+                $existsRunFunction();
+            }
             return false;
         }
 
         $this->makeDirectory($path);
-
+        // 获取文件内容
         $stub = $this->files->get($filePath);
-
+        // 写入替换之后的内容
         $this->files->put($path, $this->replaceNamespace($stub, $name)->replaceClass($stub, ''));
 
-        $this->info("{$typeInfo} created successfully.");
+        if ($createdRunFunction instanceof Closure) {
+            $createdRunFunction();
+        }
     }
 
     /**
@@ -142,5 +156,37 @@ class BaseMakeCommand extends GeneratorCommand
         return $this->qualifyClass(
             $this->getDefaultNamespace(trim($rootNamespace, '\\')).'\\'.$name
         );
+    }
+
+    /**
+     * 内容是否在文件中存在，忽略空白字符
+     * @param $file
+     * @param $content
+     * @return bool
+     */
+    protected function hasContentInFile($file, $content)
+    {
+        if ($this->files->isFile($file)) {
+            $file = $this->files->get($file);
+        }
+
+        // 删除多余的空格，回车
+        return strpos($this->trimBlankChar($file), $this->trimBlankChar($content)) !== false;
+    }
+
+    /**
+     * 删除空白字符。
+     * @param $string
+     * @return mixed
+     */
+    protected function trimBlankChar($string)
+    {
+        return str_replace([
+            "\s",
+            "\r",
+            "\n",
+            "\r\n",
+            " "
+        ], '', $string);
     }
 }

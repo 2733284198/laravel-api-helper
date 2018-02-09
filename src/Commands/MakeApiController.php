@@ -37,7 +37,16 @@ class MakeApiController extends BaseMakeCommand
     protected function getStub()
     {
         // 创建 API 基类
-        $this->createBase();
+        $this->createBase(
+            function ($class) {
+                return function(){};
+            },
+            function ($class) {
+                return function() use ($class) {
+                    $this->info("{$class} create success");
+                };
+            }
+        );
 
         if ($this->option('parent')) {
             return __DIR__.'/../Controllers/NestedController.tpl';
