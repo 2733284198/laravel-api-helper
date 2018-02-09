@@ -130,11 +130,14 @@ class BaseMakeCommand extends GeneratorCommand
         // 获取文件内容
         $stub = $this->files->get($filePath);
 
+        // 动态替换命名空间, 类名
+        $this->replaceNamespace($stub, $name)->replaceClass($stub, '');
+
         // 替换同级目录
         $stub = $this->replaceEqualPath($stub, $name);
 
         // 写入替换之后的内容
-        $this->files->put($path, $this->replaceNamespace($stub, $name)->replaceClass($stub, ''));
+        $this->files->put($path, $stub);
 
         if ($createdRunFunction instanceof Closure) {
             $createdRunFunction();
@@ -213,7 +216,7 @@ class BaseMakeCommand extends GeneratorCommand
         $apiController = $this->getApiName();
 
         return str_replace(
-            "use {$controllerNamespace}\{$apiController};\n",
+            "use {$controllerNamespace}\\{$apiController};\n",
             '',
             $stub
         );
