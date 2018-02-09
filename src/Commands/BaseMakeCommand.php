@@ -205,9 +205,11 @@ class BaseMakeCommand extends GeneratorCommand
 
     /**
      * 如果当前控制器和基类控制器同级目录
-     * 忽略掉命名空间
+     * 忽略掉命名空间.
+     *
      * @param $stub
      * @param $name
+     *
      * @return mixed
      */
     protected function replaceEqualPath($stub, $name)
