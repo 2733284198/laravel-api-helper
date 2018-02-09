@@ -67,6 +67,7 @@ class BaseMakeCommand extends GeneratorCommand
      * 状态响应码文件
      * JSON 响应类
      * Api 基类。
+     *
      * @param Closure $existsRunFunction
      * @param Closure $createdRunFunction
      */
@@ -88,7 +89,6 @@ class BaseMakeCommand extends GeneratorCommand
         ];
 
         foreach ($files as $key => $class) {
-
             $this->createFromName(
                 $class['full_name'],
                 $class['file'],
@@ -107,6 +107,7 @@ class BaseMakeCommand extends GeneratorCommand
      * @param $filePath
      * @param null $existsRunFunction
      * @param null $createdRunFunction
+     *
      * @return bool
      */
     protected function createFromName($fullName, $filePath, $existsRunFunction = null, $createdRunFunction = null)
@@ -121,6 +122,7 @@ class BaseMakeCommand extends GeneratorCommand
             if ($existsRunFunction instanceof Closure) {
                 $existsRunFunction();
             }
+
             return false;
         }
 
@@ -159,9 +161,11 @@ class BaseMakeCommand extends GeneratorCommand
     }
 
     /**
-     * 内容是否在文件中存在，忽略空白字符
+     * 内容是否在文件中存在，忽略空白字符.
+     *
      * @param $file
      * @param $content
+     *
      * @return bool
      */
     protected function hasContentInFile($file, $content)
@@ -171,12 +175,14 @@ class BaseMakeCommand extends GeneratorCommand
         }
 
         // 删除多余的空格，回车
-        return strpos($this->trimBlankChar($file), $this->trimBlankChar($content)) !== false;
+        return false !== strpos($this->trimBlankChar($file), $this->trimBlankChar($content));
     }
 
     /**
      * 删除空白字符。
+     *
      * @param $string
+     *
      * @return mixed
      */
     protected function trimBlankChar($string)
@@ -186,7 +192,7 @@ class BaseMakeCommand extends GeneratorCommand
             "\r",
             "\n",
             "\r\n",
-            " "
+            ' ',
         ], '', $string);
     }
 }

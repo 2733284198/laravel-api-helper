@@ -39,10 +39,11 @@ class MakeApiController extends BaseMakeCommand
         // 创建 API 基类
         $this->createBase(
             function ($class) {
-                return function(){};
+                return function () {
+                };
             },
             function ($class) {
-                return function() use ($class) {
+                return function () use ($class) {
                     $this->info("{$class} create success");
                 };
             }
