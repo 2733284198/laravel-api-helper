@@ -10,7 +10,6 @@
             "email": "1033404553@qq.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "php": ">=7.1",
         "tymon/jwt-auth": "1.0.0-rc.1"
