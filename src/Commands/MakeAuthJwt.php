@@ -170,8 +170,13 @@ routes;
         // 根据命名空间得到文件路径
         $path = $this->getPath($model);
 
+        // 获取 User 模型的命名空间
+        $modelNameSpace = $this->getNamespace(
+            $this->qualifyClass($model)
+        );
+
         $namespace = <<<namespace
-namespace App\Http;
+namespace {$modelNameSpace};
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
