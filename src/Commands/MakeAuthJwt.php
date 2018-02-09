@@ -39,7 +39,10 @@ class MakeAuthJwt extends BaseMakeCommand
     public function handle()
     {
         // 发布配置
-        $this->call('vendor:publish', ['--provider' => 'Tymon\JWTAuth\Providers\LaravelServiceProvider']);
+        $this->call(
+            'vendor:publish',
+            ['--provider' => 'Tymon\JWTAuth\Providers\LaravelServiceProvider']
+        );
         // 生成密钥
         $this->call('jwt:secret');
 
@@ -52,7 +55,7 @@ class MakeAuthJwt extends BaseMakeCommand
         );
 
         // 添加一些基本的认证路由
-        $authController = $this->getDefaultNamespace('').'/AuthController';
+        $authController = $this->getDefaultNamespace().'/AuthController';
         $this->addAuthRoutes($authController);
 
         // 创建 AuthController

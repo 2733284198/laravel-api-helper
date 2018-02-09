@@ -19,11 +19,10 @@ class BaseMakeCommand extends GeneratorCommand
      * 获取控制器默认命名空间。
      * 参数暂时无用，确定在 App\ 底下。
      *
-     * @param string $rootNamespace
-     *
+     * @param string $rootName
      * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace($rootName = '')
     {
         return config('apihelper.controller_namespace', '\App\Http\Controllers');
     }
