@@ -37,7 +37,8 @@ php artisan make:apiAuth
 > 3. 在`routes/api.php`增加相关路由
 > 4. 生成`AuthController`，具体目录查看`config/apihelper.php`配置
 > 5. 在`app/Exceptions/Handler::render`增加拦截`jwt`的异常抛出
-> * 访问`domain/api/auth/login`便可以进行登录了
+> ![php artisan make:apiAuth](http://p2uena5sd.bkt.clouddn.com/github/artisan_make_api_auth.png)
+> * 访问`domain/api/auth/login`便可以进行登录了(更多路由，请查看`routes/api.php`)
 ****
 ```php
 <?php

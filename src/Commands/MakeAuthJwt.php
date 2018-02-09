@@ -147,6 +147,7 @@ class MakeAuthJwt extends BaseMakeCommand
         $authController = str_replace('/', '\\', $authController);
 
         $routes = <<<routes
+        
 Route::prefix('auth')->middleware('api')->group(function () {
     Route::post('login', '{$authController}@login');
     Route::post('logout', '{$authController}@logout');
