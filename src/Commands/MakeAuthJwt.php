@@ -31,6 +31,10 @@ class MakeAuthJwt extends BaseMakeCommand
      */
     protected $files;
 
+
+    protected $header = ['index', 'class', 'status'];
+    protected $table = [];
+
     /**
      * Execute the console command.
      *
@@ -47,7 +51,9 @@ class MakeAuthJwt extends BaseMakeCommand
         $this->call('jwt:secret');
 
         // 更新您的用户模型
-        $this->updateUserModel();
+        $this->updateUserModel(
+            config('auth.providers.users.model', '\App\User')
+        );
 
         // 配置身份验证警戒
         $this->mergeAuthConfig(
@@ -55,26 +61,32 @@ class MakeAuthJwt extends BaseMakeCommand
         );
 
         // 添加一些基本的认证路由
-        $authController = $this->getDefaultNamespace().'/AuthController';
-        $this->addAuthRoutes($authController);
+        $this->addAuthRoutes(
+            $authController = $this->getDefaultNamespace().'/AuthController'
+        );
 
         // 创建 AuthController
-        $this->publishAuthController($authController);
+        $this->publishAuthController(
+            $authController
+        );
 
         // 更新异常捕获
         $this->updateHandlerRender(
             app_path('Exceptions/Handler.php')
+        );
+
+        // 输出渲染表格
+        $this->table(
+            $this->header,
+            $this->table
         );
     }
 
     /**
      * 更新 User 模型使其实现 JWTSubject 接口。
      */
-    protected function updateUserModel()
+    protected function updateUserModel($model)
     {
-        // 先获取到 模型，
-        $model = config('auth.providers.users.model', '\App\User');
-
         if (!class_exists($model)) {
             throw new ModelNotFoundException('User 模型不存在，请配置 auth.providers.users.model 参数');
         }
@@ -82,9 +94,9 @@ class MakeAuthJwt extends BaseMakeCommand
         // 如果还没有实现 JWTSubject 接口
         if (!app()->make($model) instanceof JWTSubject) {
             $this->implementInterface($model);
-            $this->info('1] User implements JWTSubject');
+            $this->addRows([1, 'User model', 'success']);
         } else {
-            $this->info('1] User no update');
+            $this->addRows([1, 'User model', 'unchanged']);
         }
     }
 
@@ -111,9 +123,9 @@ class MakeAuthJwt extends BaseMakeCommand
             $count > 0 &&
             $this->files->put($path, $config) === strlen($config)
         ) {
-            $this->info('2] Auth configure update success');
+            $this->addRows([2, 'Auth config', 'success']);
         } else {
-            $this->info('2] Auth config no updates');
+            $this->addRows([2, 'Auth config', 'unchanged']);
         }
     }
 
@@ -153,9 +165,9 @@ routes;
                 $routes
             );
 
-            $this->info('3] Route add success');
+            $this->addRows([3, 'Route api', 'success']);
         } else {
-            $this->info('3] Route no update');
+            $this->addRows([3, 'Route api', 'unchanged']);
         }
     }
 
@@ -237,12 +249,12 @@ method;
         $this->createBase(
             function ($class) {
                 return function() use ($class) {
-                    $this->info("4] {$class} no update");
+                    $this->addRows([4, $class, 'unchanged']);
                 };
             },
             function ($class) {
                 return function() use ($class) {
-                    $this->info("4] {$class} create success");
+                    $this->addRows([4, $class, 'success']);
                 };
             }
         );
@@ -251,10 +263,10 @@ method;
             $authController,
             __DIR__.'/../Auth/AuthController.tpl',
             function () {
-                $this->info('4] AuthController no update');
+                $this->addRows([4, 'AuthController', 'unchanged']);
             },
             function () {
-                $this->info('4] AuthController create success');
+                $this->addRows([4, 'AuthController', 'success']);
             }
         );
     }
@@ -311,9 +323,21 @@ replace;
             $content = str_replace($search, $replace, $content);
             $this->files->put($handlePath, $content);
 
-            $this->info('5] Handler update success');
+            $this->addRows([5, 'Handler::render', 'success']);
         } else {
-            $this->info('5] Handler no update');
+            $this->addRows([5, 'Handler::render', 'unchanged']);
         }
+    }
+
+    /**
+     * 为表格数据添加一行
+     * @param array $rows
+     * @return $this
+     */
+    protected function addRows(array $rows)
+    {
+        $this->table[] = $rows;
+
+        return $this;
     }
 }
