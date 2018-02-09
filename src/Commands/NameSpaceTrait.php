@@ -20,8 +20,9 @@ trait NameSpaceTrait
      */
     protected function getFullApiName()
     {
-        return rtrim($this->getApiNamespace(), '\\/') . '/' . ltrim($this->getApiName(), '\\/');
+        return "\\".rtrim($this->getApiNamespace(), '\\/') . '\\' . ltrim($this->getApiName(), '\\/');
     }
+
 
     /**
      * 获取 Api 基类的命名空间。

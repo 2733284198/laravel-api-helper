@@ -57,6 +57,11 @@ class MakeAuthJwt extends BaseMakeCommand
 
         // 创建 AuthController
         $this->publishAuthController($authController);
+
+        // 更新异常捕获
+        $this->updateHandlerRender(
+            app_path('Exceptions/Handler.php')
+        );
     }
 
     /**
@@ -238,5 +243,35 @@ method;
         // 设置属性可以访问
         $namespace->setAccessible(true);
         return $namespace->getValue($route);
+    }
+
+    /**
+     * 修改基础的异常捕获类，使其可以捕获到不存在 tokne 抛出的异常
+     * @param $handlePath
+     */
+    protected function updateHandlerRender($handlePath)
+    {
+        $search = <<<search
+return parent::render(\$request, \$exception);
+search;
+
+        $apiController = $this->getFullApiName();
+
+        $replace = <<<replace
+if (\$exception instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException) {
+            return (new {$apiController})->setCode(\$exception->getCode())
+                ->setMsg("[token]不合法 [{\$exception->getMessage()}]")
+                ->toJson();
+        }
+
+        return parent::render(\$request, \$exception);
+replace;
+
+        $content = $this->files->get($handlePath);
+        $content = str_replace($search, $replace, $content);
+
+        $this->files->put($handlePath, $content);
+
+        $this->info('Handler update success');
     }
 }
