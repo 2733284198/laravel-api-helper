@@ -20,6 +20,7 @@ class BaseMakeCommand extends GeneratorCommand
      * 参数暂时无用，确定在 App\ 底下。
      *
      * @param string $rootName
+     *
      * @return string
      */
     protected function getDefaultNamespace($rootName = '')
