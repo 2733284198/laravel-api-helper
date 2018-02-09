@@ -83,7 +83,7 @@ class MakeApiController extends BaseMakeCommand
             $replace = $this->buildModelReplacements($replace);
         }
 
-        // 同级目录所以不需要
+        // 如果是同级就不需要
         $replace["use {$controllerNamespace}\ApiController;\n"] = '';
 
         return str_replace(

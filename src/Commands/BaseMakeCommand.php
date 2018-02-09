@@ -129,6 +129,10 @@ class BaseMakeCommand extends GeneratorCommand
         $this->makeDirectory($path);
         // 获取文件内容
         $stub = $this->files->get($filePath);
+
+        // 替换同级目录
+        $stub = $this->replaceEqualPath($stub, $name);
+
         // 写入替换之后的内容
         $this->files->put($path, $this->replaceNamespace($stub, $name)->replaceClass($stub, ''));
 
@@ -194,5 +198,24 @@ class BaseMakeCommand extends GeneratorCommand
             "\r\n",
             ' ',
         ], '', $string);
+    }
+
+    /**
+     * 如果当前控制器和基类控制器同级目录
+     * 忽略掉命名空间
+     * @param $stub
+     * @param $name
+     * @return mixed
+     */
+    protected function replaceEqualPath($stub, $name)
+    {
+        $controllerNamespace = $this->getNamespace($name);
+        $apiController = $this->getApiName();
+
+        return str_replace(
+            "use {$controllerNamespace}\{$apiController};\n",
+            '',
+            $stub
+        );
     }
 }
