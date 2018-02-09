@@ -29,7 +29,7 @@ php artisan make:apiController UserController --resource
 ```php
 php artisan make:apiAuth
 ```
-> `make:apiAuth` 会产生以下事情：
+> `make:apiAuth` 会产生以下事件：
 > * 发布`config/jwt.php`配置文件
 > * `.env`文件生成秘钥
 > 1. 修改`User`模型使其实现`JWTSubject`接口
