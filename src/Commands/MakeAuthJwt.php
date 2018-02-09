@@ -31,8 +31,8 @@ class MakeAuthJwt extends BaseMakeCommand
      */
     protected $files;
 
-
     protected $header = ['index', 'class', 'status'];
+
     protected $table = [];
 
     /**
@@ -159,7 +159,7 @@ routes;
         $routeFile = base_path('routes/api.php');
 
         // 文件中没有当前内容才写入
-        if (! $this->hasContentInFile($routeFile, $routes)) {
+        if (!$this->hasContentInFile($routeFile, $routes)) {
             // 写入到 api 文件
             $this->files->append(
                 $routeFile,
@@ -249,12 +249,12 @@ method;
         // 创建基类
         $this->createBase(
             function ($class) {
-                return function() use ($class) {
+                return function () use ($class) {
                     $this->addRows([4, $class, 'unchanged']);
                 };
             },
             function ($class) {
-                return function() use ($class) {
+                return function () use ($class) {
                     $this->addRows([4, $class, 'success']);
                 };
             }
@@ -320,7 +320,7 @@ replace;
         $content = $this->files->get($handlePath);
 
         // 如果已经写入过，不用重复
-        if (! $this->hasContentInFile($content, $replace)) {
+        if (!$this->hasContentInFile($content, $replace)) {
             $content = str_replace($search, $replace, $content);
             $this->files->put($handlePath, $content);
 
@@ -331,8 +331,10 @@ replace;
     }
 
     /**
-     * 为表格数据添加一行
+     * 为表格数据添加一行.
+     *
      * @param array $rows
+     *
      * @return $this
      */
     protected function addRows(array $rows)
