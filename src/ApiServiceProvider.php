@@ -2,8 +2,8 @@
 
 namespace DavidNineRoc\ApiHelper;
 
-use DavidNineRoc\ApiHelper\Commands\MakeAuthJwt;
 use DavidNineRoc\ApiHelper\Commands\MakeApiController;
+use DavidNineRoc\ApiHelper\Commands\MakeAuthJwt;
 use Illuminate\Support\ServiceProvider;
 
 class ApiServiceProvider extends ServiceProvider
@@ -36,6 +36,5 @@ class ApiServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
     }
 }

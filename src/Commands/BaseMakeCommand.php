@@ -31,8 +31,9 @@ class BaseMakeCommand extends GeneratorCommand
     /**
      * 重写父类替换方法，因为 ApiController 的命名空间也是动态的。
      *
-     * @param  string  $stub
-     * @param  string  $name
+     * @param string $stub
+     * @param string $name
+     *
      * @return $this
      */
     public function replaceNamespace(&$stub, $name)
@@ -52,7 +53,7 @@ class BaseMakeCommand extends GeneratorCommand
                 config('auth.providers.users.model'),
                 $this->getApiNamespace(),
                 $this->getApiName(),
-                $this->getServicesNamespace()
+                $this->getServicesNamespace(),
             ],
             $stub
         );
@@ -71,16 +72,16 @@ class BaseMakeCommand extends GeneratorCommand
         $files = [
             'StatusServe' => [
                 'full_name' => $this->getServicesNamespace().'/StatusServe',
-                'file' => __DIR__.'/../Services/StatusServe.tpl'
+                'file' => __DIR__.'/../Services/StatusServe.tpl',
             ],
             'ResponseService' => [
                 'full_name' => $this->getServicesNamespace().'/ResponseServe',
-                'file' => __DIR__.'/../Services/ResponseServe.tpl'
+                'file' => __DIR__.'/../Services/ResponseServe.tpl',
             ],
             $this->getApiName() => [
                 'full_name' => $this->getFullApiName(),
-                'file' => __DIR__.'/../Controllers/ApiController.tpl'
-            ]
+                'file' => __DIR__.'/../Controllers/ApiController.tpl',
+            ],
         ];
 
         foreach ($files as $key => $class) {
@@ -92,9 +93,11 @@ class BaseMakeCommand extends GeneratorCommand
      * 根据给定的 命名空间，文件路径 提示消息。
      * 先去解析参数的命名空间，得到一个目标路径文件，
      * 然后通过给定的文件路径去读取内容，替换，之后写入到目标路径文件。
+     *
      * @param $fullName
      * @param $filePath
      * @param string $typeInfo
+     *
      * @return bool
      */
     protected function createFromName($fullName, $filePath, $typeInfo = '')
@@ -121,7 +124,8 @@ class BaseMakeCommand extends GeneratorCommand
     /**
      * 根据根命名空间解析类名和格式。
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return string
      */
     protected function qualifyClass($name)

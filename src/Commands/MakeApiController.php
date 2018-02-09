@@ -10,24 +10,28 @@ class MakeApiController extends BaseMakeCommand
 {
     /**
      * 控制台命令。
+     *
      * @var string
      */
     protected $name = 'make:apiController';
 
     /**
      * 命令描述。
+     *
      * @var string
      */
     protected $description = '创建一个 API 控制器';
 
     /**
      * 生成的类类型。
+     *
      * @var string
      */
     protected $type = 'Controller';
 
     /**
      * 创建基类并获取和输入有关的控制器。
+     *
      * @return string
      */
     protected function getStub()

@@ -25,7 +25,8 @@ class MakeAuthJwt extends BaseMakeCommand
     protected $description = '创建 jwt 方式登录验证';
 
     /**
-     * 文件操作实例
+     * 文件操作实例.
+     *
      * @var Filesystem
      */
     protected $files;
@@ -38,10 +39,9 @@ class MakeAuthJwt extends BaseMakeCommand
     public function handle()
     {
         // 发布配置
-        $this->call('vendor:publish', [ '--provider' => 'Tymon\JWTAuth\Providers\LaravelServiceProvider']);
+        $this->call('vendor:publish', ['--provider' => 'Tymon\JWTAuth\Providers\LaravelServiceProvider']);
         // 生成密钥
         $this->call('jwt:secret');
-
 
         // 更新您的用户模型
         $this->updateUserModel();
@@ -65,26 +65,27 @@ class MakeAuthJwt extends BaseMakeCommand
     }
 
     /**
-     * 把 jwt-auth 所需的配置合并到 config/auth.php 中
+     * 把 jwt-auth 所需的配置合并到 config/auth.php 中.
+     *
      * @param $path
      */
     public function mergeAuthConfig($path)
     {
         $config = $this->files->get($path);
 
-        $search  = [
+        $search = [
             "'guard' => 'web'",
-            "'driver' => 'token'"
+            "'driver' => 'token'",
         ];
         $replace = [
             "'guard' => 'api'",
-            "'driver' => 'jwt'"
+            "'driver' => 'jwt'",
         ];
         $config = str_replace($search, $replace, $config, $count);
 
         if (
             $count > 0 &&
-            $this->files->put($path, $config) == strlen($config)
+            $this->files->put($path, $config) === strlen($config)
         ) {
             $this->info('Auth configure update success');
         } else {
@@ -93,7 +94,8 @@ class MakeAuthJwt extends BaseMakeCommand
     }
 
     /**
-     * 添加基本的验证路由
+     * 添加基本的验证路由.
+     *
      * @param $authController
      */
     protected function addAuthRoutes($authController)
@@ -135,12 +137,12 @@ routes;
         // 先获取到 模型，
         $model = config('auth.providers.users.model', '\App\User');
 
-        if (! class_exists($model)) {
+        if (!class_exists($model)) {
             throw new ModelNotFoundException('User 模型不存在，请配置 auth.providers.users.model 参数');
         }
 
         // 如果还没有实现 JWTSubject 接口
-        if (! app()->make($model) instanceof JWTSubject) {
+        if (!app()->make($model) instanceof JWTSubject) {
             $this->implementInterface($model);
         }
 
@@ -150,6 +152,7 @@ routes;
     /**
      * 让模型实现接口，增加方法
      * 并写入到原来的模型文件。
+     *
      * @param $model
      */
     protected function implementInterface($model)
@@ -167,8 +170,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable  implements JWTSubject
 namespace;
 
-
-        $methods = <<<method
+        $methods = <<<'method'
         
     /**
      * 获取将存储在JWT主题声明中的标识符。
@@ -177,7 +179,7 @@ namespace;
      */
     public function getJWTIdentifier()
     {
-        return \$this->getKey();
+        return $this->getKey();
     }
 
     /**
@@ -210,7 +212,8 @@ method;
     }
 
     /**
-     * 发布有关验证的控制器
+     * 发布有关验证的控制器.
+     *
      * @param $authController
      */
     protected function publishAuthController($authController)
@@ -226,7 +229,8 @@ method;
     }
 
     /**
-     * 获取 RouteServiceProvider 默认的命名空间
+     * 获取 RouteServiceProvider 默认的命名空间.
+     *
      * @return mixed
      */
     protected function getRouteBaseNamespace()
@@ -242,17 +246,19 @@ method;
 
         // 设置属性可以访问
         $namespace->setAccessible(true);
+
         return $namespace->getValue($route);
     }
 
     /**
-     * 修改基础的异常捕获类，使其可以捕获到不存在 tokne 抛出的异常
+     * 修改基础的异常捕获类，使其可以捕获到不存在 tokne 抛出的异常.
+     *
      * @param $handlePath
      */
     protected function updateHandlerRender($handlePath)
     {
-        $search = <<<search
-return parent::render(\$request, \$exception);
+        $search = <<<'search'
+return parent::render($request, $exception);
 search;
 
         $apiController = $this->getFullApiName();
