@@ -308,7 +308,7 @@ search;
         $apiController = $this->getFullApiName();
 
         $replace = <<<replace
-        /**
+/**
          * 拦截 token 异常抛出的错误 (token 不存在，token 找不到用户 ...)
          */
         if (\$exception instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException) {
@@ -329,6 +329,13 @@ search;
 replace;
 
         $content = $this->files->get($handlePath);
+
+        // 替换函数的返回值显示
+        $content = str_replace(
+            '* @return \Illuminate\Http\Response',
+            '* @return \Symfony\Component\HttpFoundation\Response',
+            $content
+        );
 
         // 如果已经写入过，不用重复
         if (!$this->hasContentInFile($content, $replace)) {
