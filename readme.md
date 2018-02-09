@@ -36,7 +36,7 @@ php artisan make:apiAuth
 > 2. 更新`config/auth.php`文件
 > 3. 在`routes/api.php`增加相关路由
 > 4. 生成`AuthController`，具体目录查看`config/apihelper.php`配置
-> 5. 在`app/Exceptions/Handler::render`增加拦截`jwt`的异常抛出
+> 5. 在`app/Exceptions/Handler::render`增加拦截`jwt`，表单验证错误的异常抛出
 > ![php artisan make:apiAuth](http://p2uena5sd.bkt.clouddn.com/github/artisan_make_api_auth.png)
 > * 访问`domain/api/auth/login`便可以进行登录了(更多路由，请查看`routes/api.php`)
 ****
@@ -45,6 +45,8 @@ php artisan make:apiAuth
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
+
 class UserController extends ApiController
 {
     public function error()
@@ -52,20 +54,27 @@ class UserController extends ApiController
         $this->notFound('请求数据不存在');
     }
         
-    public function login()
+    public function login(Request $request)
     {
-        // 表单验证失败
-        if (false) {
-            return $this->badRequest('手机号不存在');
-        }
+        /**
+         * 在这里进行了表单验证，不需要做什么，
+         * 因为已经在异常捕获了表单验证失败，
+         * 并且默认返回第一个错误消息
+         * 当然，你也可以使用表单请求验证，
+         * 注入一个表单请求类来完成验证
+         */
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required|min:6'
+        ]);
         
         // 身份验证失败
         return $this->unAuthorized('账号或者密码错误');
     }
     
-    public function store()
+    public function store(Request $request)
     {
-        $user = User::create([]);
+        $user = User::create($request->all());
         
         return $this->created('用户注册成功', $user);
     }

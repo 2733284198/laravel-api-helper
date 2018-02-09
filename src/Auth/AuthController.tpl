@@ -2,9 +2,10 @@
 
 namespace DummyNamespace;
 
+use Illuminate\Http\Request;
 use DummyApiNamespace\DummyApiName;
 
-class AuthController extends DummyApiName
+class AuthController extends ApiController
 {
     /**
      * 创建一个新的 AuthController 实例。
@@ -19,11 +20,24 @@ class AuthController extends DummyApiName
     /**
      * 通过给定的凭据获得一个 JWT。
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
     {
-        $credentials = request(['email', 'password']);
+        /**
+         * 在这里进行了表单验证，不需要做什么，
+         * 因为已经在异常捕获了表单验证失败，
+         * 并且默认返回第一个错误消息
+         * 当然，你也可以使用表单请求验证，
+         * 注入一个表单请求类来完成验证
+         */
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required|min:6'
+        ]);
+
+        $credentials = $request->only(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
             return $this->unAuthorized();
@@ -74,7 +88,7 @@ class AuthController extends DummyApiName
     protected function respondWithToken($token)
     {
         return $this->setData([
-            'access_token' => $token,
+            'token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
         ])->toJson();
