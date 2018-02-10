@@ -16,7 +16,7 @@ class ApiServiceProvider extends ServiceProvider
         // 发布配置文件
         $this->publishes(
             [
-                __DIR__.'/Config/apihelper.php' => config_path('apihelper.php'),
+                __DIR__.'/../config/apihelper.php' => config_path('apihelper.php'),
             ],
             'config'
         );
