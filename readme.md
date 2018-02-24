@@ -13,9 +13,14 @@
 * Laravel 5.5.*
 ## Installation & Usage
 * 使用`composer`安装
-```php
-composer require davidnineroc/laravel-api-helper
-```
+    * 先安装**jwt-auth**(等v1稳定版本出来了再依赖)
+    ```php
+    composer require tymon/jwt-auth v1.0.0-rc.2
+    ```
+    * 安装**api-helper**
+    ```php
+    composer require davidnineroc/laravel-api-helper v1.1.7
+    ```
 * 发布文件 (开始之前你完全可以把`app\Http\Controllers`目录删除了，然后按需配置)
 ```php
 php artisan vendor:publish --provider=DavidNineRoc\ApiHelper\ApiServiceProvider
@@ -111,3 +116,6 @@ class UserController extends ApiController
 ## Errors
 * 出现模型修改错误
     * 确保`config/auth.php=>providers=>users=>model`配置正确了`User`模型
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
