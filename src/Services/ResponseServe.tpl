@@ -95,6 +95,18 @@ trait ResponseServe
     }
 
     /**
+     * 请求方法不存在
+     * @param string $msg
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function methodNotAllow($msg = '请求方法不允许')
+    {
+        return $this->setCode(StatusServe::HTTP_METHOD_NOT_ALLOWED)
+            ->setMsg($msg)
+            ->toJson();
+    }
+
+    /**
      * 表单验证错误响应。
      * @param string $msg
      * @return \Illuminate\Http\JsonResponse
