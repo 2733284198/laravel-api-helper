@@ -131,6 +131,11 @@ trait ResponseServe
         // 如果响应消息从未被设置过，则去取默认的消息。
         $this->msg = empty($this->msg) ? StatusServe::getStatusMsg($this->code) : $this->msg;
 
+        // 如果数据不是对象或者数组格式
+        if (! is_array($this->data) && ! is_object($this->data)) {
+            $this->data = (array) $this->data;
+        }
+
         $response = [
             'code' => $this->code,
             'msg' => $this->msg,
