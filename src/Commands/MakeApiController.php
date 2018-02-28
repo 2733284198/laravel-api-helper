@@ -13,7 +13,7 @@ class MakeApiController extends BaseMakeCommand
      *
      * @var string
      */
-    protected $name = 'make:apiController';
+    protected $name = 'api:controller';
 
     /**
      * 命令描述。

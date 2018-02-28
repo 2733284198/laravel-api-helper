@@ -15,7 +15,7 @@ class MakeAuthJwt extends BaseMakeCommand
      *
      * @var string
      */
-    protected $signature = 'make:apiAuth';
+    protected $signature = 'api:auth';
 
     /**
      * The console command description.

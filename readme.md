@@ -19,7 +19,7 @@
     ```
     * 安装**api-helper**
     ```php
-    composer require davidnineroc/laravel-api-helper v1.1.7
+    composer require davidnineroc/laravel-api-helper v1.1.8
     ```
 * 发布文件 (开始之前你完全可以把`app\Http\Controllers`目录删除了，然后按需配置)
 ```php
@@ -27,12 +27,12 @@ php artisan vendor:publish --provider=DavidNineRoc\ApiHelper\ApiServiceProvider
 ```
 * 创建一个资源控制器
 ```php
-php artisan make:apiController UserController --resource
+php artisan api:controller UserController --resource
 ```
 ## Example
 * 快速完成登录相关 (基于 [jwt-auth](https://github.com/tymondesigns/jwt-auth))
 ```php
-php artisan make:apiAuth
+php artisan api:auth
 ```
 > `make:apiAuth` 会产生以下事件：
 > * 发布`config/jwt.php`配置文件

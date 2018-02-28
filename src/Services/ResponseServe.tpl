@@ -34,7 +34,7 @@ trait ResponseServe
      * @param array $data
      * @return \Illuminate\Http\JsonResponse
      */
-    public function created($msg = '资源创建成功', array $data = [])
+    public function created($msg = '资源创建成功', $data = [])
     {
         return $this->setCode(StatusServe::HTTP_CREATED)
             ->setMsg($msg)
@@ -46,7 +46,6 @@ trait ResponseServe
     /**
      * 服务器位置错误响应。
      * @param string $msg
-     * @param array $data
      * @return \Illuminate\Http\JsonResponse
      */
     public function serviceUnavailable($msg = '服务器未知出错')
