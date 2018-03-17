@@ -4,6 +4,7 @@
     "keywords": ["DavidNineRoc", "laravel", "API", "helper"],
     "type": "library",
     "license": "MIT",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "DavidNineRoc",

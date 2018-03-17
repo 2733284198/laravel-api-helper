@@ -29,6 +29,10 @@ php artisan vendor:publish --provider=DavidNineRoc\ApiHelper\ApiServiceProvider
 ```php
 php artisan api:controller UserController --resource
 ```
+* 创建一个 Service
+```php
+php artisan api:controller UserController --resource
+```
 ## Example
 * 快速完成登录相关 (基于 [jwt-auth](https://github.com/tymondesigns/jwt-auth))
 ```php
