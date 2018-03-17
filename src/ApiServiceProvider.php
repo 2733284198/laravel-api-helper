@@ -22,7 +22,7 @@ class ApiServiceProvider extends ServiceProvider
 
         // 发布 api 文档
         $this->publishes([
-            __DIR__.'/Docs' => public_path('docs')
+            __DIR__.'/Docs' => public_path('docs'),
         ], 'docs');
 
         if ($this->app->runningInConsole()) {
