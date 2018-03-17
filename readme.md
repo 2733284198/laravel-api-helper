@@ -13,23 +13,18 @@
 * Laravel 5.5.*
 ## Installation & Usage
 * 使用`composer`安装
-    * 先安装**jwt-auth**(等v1稳定版本出来了再依赖)
-    ```php
-    composer require tymon/jwt-auth v1.0.0-rc.2
-    ```
-    * 安装**api-helper**
-    ```php
-    composer require davidnineroc/laravel-api-helper v1.1.8
-    ```
-* 发布文件 (开始之前你完全可以把`app\Http\Controllers`目录删除了，然后按需配置)
 ```php
-php artisan vendor:publish --provider=DavidNineRoc\ApiHelper\ApiServiceProvider
+composer require davidnineroc/laravel-api-helper dev-master  --dev
+```
+* 发布配置文件 (开始之前你完全可以把`app\Http\Controllers`目录删除了，然后按需配置)
+```php
+php artisan vendor:publish --provider=DavidNineRoc\ApiHelper\ApiServiceProvider --tag=config
+```
+* 发布 api 文档(/public/docs) 请务必修改(/public/docs/index.html)里的`url: "api.json"`中的`api.json`加上你的域名访问
+```php
+php artisan vendor:publish --provider=DavidNineRoc\ApiHelper\ApiServiceProvider --tag=docs
 ```
 * 创建一个资源控制器
-```php
-php artisan api:controller UserController --resource
-```
-* 创建一个 Service
 ```php
 php artisan api:controller UserController --resource
 ```

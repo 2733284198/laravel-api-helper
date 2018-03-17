@@ -14,12 +14,16 @@ class ApiServiceProvider extends ServiceProvider
     public function boot()
     {
         // 发布配置文件
-        $this->publishes(
-            [
+        $this->publishes([
                 __DIR__.'/../config/apihelper.php' => config_path('apihelper.php'),
             ],
             'config'
         );
+
+        // 发布 api 文档
+        $this->publishes([
+            __DIR__.'/Docs' => public_path('docs')
+        ], 'docs');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
