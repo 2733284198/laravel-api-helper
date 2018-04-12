@@ -14,6 +14,7 @@
 ## Installation & Usage
 * 使用`composer`安装
 ```php
+composer require tymon/jwt-auth 1.0.0-rc.2
 composer require davidnineroc/laravel-api-helper dev-master  --dev
 ```
 * 发布配置文件 (开始之前你完全可以把`app\Http\Controllers`目录删除了，然后按需配置)
