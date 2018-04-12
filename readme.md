@@ -27,7 +27,7 @@ php artisan vendor:publish --provider=DavidNineRoc\ApiHelper\ApiServiceProvider 
 ```
 * 创建一个资源控制器
 ```php
-php artisan api:controller UserController --resource
+php artisan make:apiController UserController --resource
 ```
 ## Example
 * 快速完成登录相关 (基于 [jwt-auth](https://github.com/tymondesigns/jwt-auth))
