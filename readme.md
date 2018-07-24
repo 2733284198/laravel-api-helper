@@ -117,5 +117,4 @@ class UserController extends ApiController
 * 出现模型修改错误
     * 确保`config/auth.php=>providers=>users=>model`配置正确了`User`模型
 ## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+[MIT license](https://opensource.org/licenses/MIT).
