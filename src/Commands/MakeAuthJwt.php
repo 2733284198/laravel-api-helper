@@ -313,7 +313,7 @@ search;
          */
         if (\$exception instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException) {
 
-            return (new {\$apiController})->->unAuthorized("[token]不合法 [[token]不合法 [{\$exception->getMessage()}]]");
+            return (new {$apiController})->unAuthorized("[token]不合法 [[token]不合法 [{\$exception->getMessage()}]]");
         } elseif (\$exception instanceof \Illuminate\Validation\ValidationException) {
             /**
              * 拦截表单验证错误抛出的异常
